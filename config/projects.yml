@@ -1,0 +1,2 @@
+deploy-post-hook:
+  branch: master
