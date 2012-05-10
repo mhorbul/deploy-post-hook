@@ -1,7 +1,7 @@
 require 'sinatra'
 
 class Deployer::WebHandler < Sinatra::Base
-  get "/" do
+  post "/" do
     EM.defer do
       worker = Deployer::Worker.new(:logger => logger, :projects => Deployer.projects)
       worker.process(params[:payload])
