@@ -1,3 +1,5 @@
+require 'sinatra'
+
 class Deployer::WebHandler < Sinatra::Base
   get "/" do
     EM.defer do
