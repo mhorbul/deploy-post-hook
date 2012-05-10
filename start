@@ -1,0 +1,5 @@
+#!/bin/env bash
+
+ruby -rubygems -e 'STDOUT.sync=STDERR.sync=true; load Gem.bin_path("foreman", "foreman")' start -p #{http_port} -c web=1  >> log/web.log 2>&1 &
+
+echo $! > ../shared/pids/web.pid
