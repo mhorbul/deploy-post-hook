@@ -1,1 +1,1 @@
-rvm use 1.9.3@post-hook-deployer
+rvm use ree@post-hook-deployer
