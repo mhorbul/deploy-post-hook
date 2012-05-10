@@ -1,3 +1,5 @@
+require 'yaml'
+
 module Deployer
 
   VERSION = "0.0.1"
@@ -7,5 +9,9 @@ module Deployer
   autoload :Worker, "deployer/worker"
 
   def self.root; ROOT_PATH; end
+
+  def self.projects
+    @config ||= YAML.load_file(File.join(self.root, 'config/projects.yml'))
+  end
 
 end
