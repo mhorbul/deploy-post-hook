@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 require 'logger'
 require 'yajl/json_gem'
+require 'mixlib/shellout'
 
 module Deployer
   class Worker
@@ -12,30 +14,39 @@ module Deployer
     def initialize(config = {})
       @logger = config[:logger]
       @projects = config[:projects] || {}
+      @queue = EM::Queue.new
+      @channel = EM::Channel.new
+    end
+
+    def enqueue(payload)
+      payload = JSON.parse(payload)
+      branch = payload["ref"].to_s.gsub(%r{refs/heads/}, "")
+      name = payload["repository"]["name"]
+      if should_deploy?(name, branch)
+        logger.info("Enqueue deployment for #{name}/#{branch}")
+        @queue.push name
+      end
+    end
+
+    def perform(name)
+      @queue.pop do |project_name|
+        deploy(project_name)
+      end
     end
 
     def logger
       @logger ||= Logger.new(STDOUT)
     end
 
-    def process(payload)
-      payload = JSON.parse(payload)
-      branch = payload["ref"].gsub(%r{refs/heads/}, "")
-      name = payload["repository"]["name"]
-      logger.info("Start processing deploy request: project:#{name}; branch:#{branch}")
-      deploy(name, branch) if should_deploy?(name, branch)
-      logger.debug("Finish processing deploy request: project:#{name}; branch:#{branch}")
-    end
-
     private
     def should_deploy?(name, branch)
       project = @projects[name]
       if project.nil?
-        logger.debug("Skip project '#{name}'")
+        logger.warn("Skip project '#{name}'")
         return false
       end
       if project["branch"] != branch
-        logger.debug("Skip branch '#{branch}' for project '#{name}'. Monitored branch is '#{project["branch"]}'")
+        logger.warn("Skip branch '#{branch}' for project '#{name}'. Monitored branch is '#{project["branch"]}'")
         return false
       end
       if project["home"].nil?
@@ -49,14 +60,17 @@ module Deployer
       true
     end
 
-    def deploy(name, branch)
+    def deploy(name)
       start = Time.now
       logger.info("Deploying project '#{name}'...")
       project = @projects[name]
-      command = "cd #{project["home"]} && git pull origin/#{project["branch"]} && cap deploy"
-      logger.debug("-- CMD: #{command} --")
-      logger.debug("-- OUT: --")
-      out = `#{command} 2>&1`
+      cmd = "cd #{project["home"]}/shared/cached-copy && git pull origin #{project["branch"]} && cap deploy"
+      command = Mixlib::ShellOut.new(cmd, :cwd => project["home"], :logger => logger)
+      command.run_command
+      msg = command.format_for_exception
+      logger.debug(msg)
+#      result = `#{cmd}`
+#      logger.debug(result)
     end
   end
 end

@@ -6,9 +6,17 @@ class Deployer::WebHandler < Sinatra::Base
   end
 
   post "/" do
-    EM.defer do
-      worker = Deployer::Worker.new(:logger => logger, :projects => Deployer.projects)
-      worker.process(params[:payload])
-    end
+    worker.enqueue(params[:payload])
+  end
+
+  def deferred?(env)
+    logger.info("env: #{env.inspect}")
+    true
+  end
+
+  private
+  def worker
+    logger.level = Logger::DEBUG
+    @worker ||= Deployer::Worker.new(:logger => logger, :projects => Deployer.projects)
   end
 end
