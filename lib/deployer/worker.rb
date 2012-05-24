@@ -15,7 +15,7 @@ module Deployer
       @logger = config[:logger]
       @projects = config[:projects] || {}
       @queue = EM::Queue.new
-      EM.add_periodical_timer(2) { perform }
+      EM.add_periodic_timer(2) { perform }
     end
 
     def enqueue(payload)
