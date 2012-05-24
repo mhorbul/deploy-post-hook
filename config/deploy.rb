@@ -22,16 +22,19 @@ after "deploy:setup" do
   run "mkdir -p #{shared_path}/bundle"
 end
 
-after :deploy, "bundle:install"
+after "deploy:update_code", "bundle:install"
 
 namespace :deploy do
   task :start do
     run("cd #{current_path} && PORT=#{http_port} ./start")
   end
   task :stop do
-    run "kill -TERM $(cat #{shared_path}/pids/web.pid)"
+    run "if [ -f '#{shared_path}/pids/web.pid' ]; then kill -TERM $(cat #{shared_path}/pids/web.pid) && rm -rf #{shared_path}/pids/web.pid; fi; exit 0"
   end
   task :restart, :roles => :app, :except => { :no_release => true } do
+    stop
+    sleep(3)
+    start
   end
 end
 
