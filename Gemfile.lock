@@ -1,9 +1,24 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    capistrano (2.12.0)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.1.0)
     daemons (1.1.8)
     eventmachine (1.0.0.beta.4)
+    highline (1.6.12)
     minitest (2.12.1)
+    mixlib-shellout (1.0.0)
+    net-scp (1.0.4)
+      net-ssh (>= 1.99.1)
+    net-sftp (2.0.5)
+      net-ssh (>= 2.0.9)
+    net-ssh (2.3.0)
+    net-ssh-gateway (1.1.0)
+      net-ssh (>= 1.99.1)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
@@ -22,7 +37,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  capistrano
   minitest
+  mixlib-shellout
   sinatra
   thin
   yajl-ruby
