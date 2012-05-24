@@ -28,7 +28,7 @@ module Deployer
       end
     end
 
-    def perform(name)
+    def perform
       @queue.pop do |project_name|
         deploy(project_name)
       end
