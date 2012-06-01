@@ -33,7 +33,7 @@ namespace :deploy do
   end
   task :restart, :roles => :app, :except => { :no_release => true } do
     stop
-    sleep(3)
+    sleep(5)
     start
   end
 end
