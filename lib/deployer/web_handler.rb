@@ -6,7 +6,7 @@ class Deployer::WebHandler < Sinatra::Base
   end
 
   post "/" do
-    if patams[:payload]
+    if params[:payload]
       worker.enqueue(params[:payload])
     else
       logger.error("payload is not found in params: #{params.inspect}")
