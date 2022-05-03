@@ -15,17 +15,21 @@ GEM
       concurrent-ruby (~> 1.0)
     minitest (5.11.3)
     mixlib-shellout (2.3.2)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
-    rack (1.6.10)
-    rack-protection (1.5.5)
+    rack (2.2.3)
+    rack-protection (2.2.0)
       rack
     rake (12.3.1)
-    sinatra (1.4.8)
-      rack (~> 1.5)
-      rack-protection (~> 1.4)
-      tilt (>= 1.3, < 3)
+    ruby2_keywords (0.0.5)
+    sinatra (2.2.0)
+      mustermann (~> 1.0)
+      rack (~> 2.2)
+      rack-protection (= 2.2.0)
+      tilt (~> 2.0)
     sshkit (1.16.1)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
@@ -33,7 +37,7 @@ GEM
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
       rack (>= 1, < 3)
-    tilt (2.0.8)
+    tilt (2.0.10)
     yajl-ruby (1.4.0)
 
 PLATFORMS
@@ -43,7 +47,7 @@ DEPENDENCIES
   capistrano
   minitest
   mixlib-shellout
-  rack-protection (~> 1.5.5)
+  rack-protection (~> 2.2.0)
   sinatra
   thin
   yajl-ruby

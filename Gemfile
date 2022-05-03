@@ -4,7 +4,7 @@ gem 'sinatra'
 gem 'thin'
 gem 'yajl-ruby'
 gem 'mixlib-shellout'
-gem 'rack-protection', ' ~> 1.5.5'
+gem 'rack-protection', '~> 2.2.0'
 
 group :test do
   gem 'minitest'
